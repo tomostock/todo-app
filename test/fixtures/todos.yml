@@ -3,9 +3,9 @@
 one:
   title: MyString
   content: MyString
-  del_flg: 1
+  status: 1
 
 two:
   title: MyString
   content: MyString
-  del_flg: 1
+  status: 1
