@@ -14,8 +14,8 @@ ActiveRecord::Schema.define(version: 2021_11_15_024805) do
 
   create_table "todos", force: :cascade do |t|
     t.string "title"
-    t.string "content"
-    t.integer "del_flg"
+    t.text "content"
+    t.integer "status", default: 1
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
