@@ -28,4 +28,9 @@ RSpec.describe Todo, type: :model do
     expect(todo.errors[:status]).to include("can't be blank")
   end
 
+  it "デリートフラグが1以上の場合、無効である" do
+    todo = FactoryBot.build(:todo, status: 2)
+    expect(todo).to_not be_valid
+  end
+
 end
