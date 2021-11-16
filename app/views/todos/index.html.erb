@@ -1,0 +1,14 @@
+<h2>index</h2>
+<%= link_to "new", new_todo_path, class: 'btn btn-default' %>
+<hr>
+<% @todo.each do |t| %>
+  <div>
+    <h3><%= t.title %></h3>
+    <p><%= simple_format(t.content)%></p>
+    <p>作成：<%= t.created_at.strftime('%Y/%m/%d %H:%M:%S') %></p>
+    <p>更新：<%= t.updated_at.strftime('%Y/%m/%d %H:%M:%S') %></p>
+    <button>detail</button>
+    <%= link_to "edit", edit_todo_path(t.id), class: 'btn btn-default' %>
+    <%= link_to 'del', todo_path(t.id), :method => :delete, data: { confirm: "are you sure?" } %>
+  </div>
+<% end %>
