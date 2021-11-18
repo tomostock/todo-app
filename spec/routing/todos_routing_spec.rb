@@ -3,6 +3,10 @@ require "rails_helper"
 RSpec.describe TodosController, type: :routing do
   describe "routing" do
 
+    it "routes to #top" do
+      expect(:get => "/").to route_to("todos#index")
+    end
+
     it "routes to #index" do
       expect(:get => "/todos").to route_to("todos#index")
     end
@@ -32,12 +36,12 @@ RSpec.describe TodosController, type: :routing do
     end
 
     it "routes to #top" do
-      expect(:get => "/").to route_to("home#top")
+      expect(:get => "/home/top").to route_to("home#top")
     end
 
     it "routes to #welcome" do
       expect(:get => "/welcome").to route_to("welcome#index")
     end
-    
+
   end
 end
