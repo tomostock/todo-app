@@ -30,5 +30,14 @@ RSpec.describe TodosController, type: :routing do
     it "routes to #destroy" do
       expect(:delete => "/todos/1").to route_to("todos#destroy", :id => "1")
     end
+
+    it "routes to #top" do
+      expect(:get => "/").to route_to("home#top")
+    end
+
+    it "routes to #welcome" do
+      expect(:get => "/welcome").to route_to("welcome#index")
+    end
+    
   end
 end
