@@ -3,12 +3,24 @@ import PropTypes from 'prop-types'
 
 //メインのコンポーネント
 class Todos extends React.Component {
-  
+
+  get axios() {
+    const axiosBase = require('axios');
+    return axiosBase.create({
+        baseURL: process.env.REACT_APP_DEV_API_URL,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        responseType: 'json'
+    });
+  }
   //コンストラクタ。
   //このコンポーネントのstateにはタスク一覧を用意する
   constructor(props){
     super(props)
     this.state = {initialTodos: this.props.todos, todos:[]}
+    // console.log(this.axios.get('todos'))
   }
   
   //componentDidMountでpropの内容を変化できる
@@ -40,15 +52,27 @@ const TodosList = (props) => {
 const TodoItem = (props) => {
   //受け取ったタスクのオブジェクトの値を、それぞれ行のセルに挿入。
   const {id, title, content, created_at, updated_at} = props.todo
+  const edit_path = "/todos/" + id + "/edit"
+
   return (
     <div className="todo">
       <p>{title}</p>
       <p>{content}</p>
       <p>{created_at}</p>
       <p>{updated_at}</p>
+      <a href={edit_path}>test</a>
+      <button onClick={() => { handleClick(id) }} className="delete-btn">Delete</button>
     </div>
   )
 }
+
+// const handleClick = (id) => {
+//   const requestOptions = { method: 'delete' }
+//   fetch("/todos/" + id, { method: 'delete' }).then((response) => {
+//     return response.json();
+//   })
+// }
+
 //TaskItemコンポーネントが受け取るpropsを定義。
 //ここではタスクオブジェクト。
 TodoItem.propTypes = {
