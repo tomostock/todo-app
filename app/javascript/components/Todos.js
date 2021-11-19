@@ -33,6 +33,7 @@ class Todos extends React.Component {
 //一覧についてのコンポーネント。クラスコンポーネントとは違い、関数コンポーネントになっている。
 const TodosList = (props) => { 
   //タスク一覧を表示する。
+  console.log("test")
   return (
     <div className="todos">
         {props.todos.map((todo) =>
@@ -55,16 +56,22 @@ const TodoItem = (props) => {
     <div className="todo">
       <p>{title}</p>
       <p>{content}</p>
-      <p>{created_at}</p>
-      <p>{updated_at}</p>
-      <button onClick={() => { editClick(id) }} className="edit-btn">edit</button>      
+      <small>{created_at}</small>
+      <small>{updated_at}</small>
+      <button onClick={() => { detailClick(id) }} className="edit-btn">edit</button>
+      <button onClick={() => { editClick(id) }} className="edit-btn">edit</button>
       <button onClick={() => { deleteClick(id) }} className="delete-btn">Delete</button>
     </div>
   )
 }
 
+const detailClick = (id) => {
+  //ポップアップ
+}
+
 const editClick = (id) => {
   location.href = "/todos/" + id + "/edit"
+
 }
 
 const deleteClick = (id) => {
