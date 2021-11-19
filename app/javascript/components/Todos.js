@@ -1,29 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
+
 
 //メインのコンポーネント
 class Todos extends React.Component {
 
-  get axios() {
-    const axiosBase = require('axios');
-    return axiosBase.create({
-        baseURL: process.env.REACT_APP_DEV_API_URL,
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        responseType: 'json'
-    });
-  }
   //コンストラクタ。
   //このコンポーネントのstateにはタスク一覧を用意する
   constructor(props){
     super(props)
     this.state = {initialTodos: this.props.todos, todos:[]}
-    // console.log(this.axios.get('todos'))
   }
   
   //componentDidMountでpropの内容を変化できる
+  componentDidMount() { 
+    this.setState({todos: this.state.initialTodos})
+  }
+
   //ページ全体のrenderメソッド。
   render() {
     return (
@@ -48,11 +42,14 @@ const TodosList = (props) => {
   )
 }
 
+TodosList.propTypes = {
+  todos: PropTypes.array.isRequired
+}
+
 //todoの1つの行を表すコンポーネント。上と同様関数コンポーネント。
 const TodoItem = (props) => {
   //受け取ったタスクのオブジェクトの値を、それぞれ行のセルに挿入。
   const {id, title, content, created_at, updated_at} = props.todo
-  const edit_path = "/todos/" + id + "/edit"
 
   return (
     <div className="todo">
@@ -60,26 +57,30 @@ const TodoItem = (props) => {
       <p>{content}</p>
       <p>{created_at}</p>
       <p>{updated_at}</p>
-      <a href={edit_path}>test</a>
-      <button onClick={() => { handleClick(id) }} className="delete-btn">Delete</button>
+      <button onClick={() => { editClick(id) }} className="edit-btn">edit</button>      
+      <button onClick={() => { deleteClick(id) }} className="delete-btn">Delete</button>
     </div>
   )
 }
 
-// const handleClick = (id) => {
-//   const requestOptions = { method: 'delete' }
-//   fetch("/todos/" + id, { method: 'delete' }).then((response) => {
-//     return response.json();
-//   })
-// }
+const editClick = (id) => {
+  location.href = "/todos/" + id + "/edit"
+}
 
-//TaskItemコンポーネントが受け取るpropsを定義。
-//ここではタスクオブジェクト。
+const deleteClick = (id) => {
+  axios.delete("/todos/" + id, {
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    }
+  }).then( res => {
+    location.reload()
+    //↑とりあえず今は。表示配列の編集を行い表示させる！
+  })
+}
+
 TodoItem.propTypes = {
   todo: PropTypes.object.isRequired
 }
 
-//react-railsではこの行がないとエラーになるっぽい。
-//メインとなるクラス名、ここで書いているクラス名、ファイル名の3つの名前が一緒じゃないと、
-//エラーが起こって実行できなかった。
 export default Todos
