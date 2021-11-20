@@ -54,9 +54,7 @@ class Todos extends React.Component {
         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
       }
     }).then( res => {
-      const todoslist = this.state.todos
-      const newlist = todoslist.filter(todo => todo.id !== id)
-      this.setState({todos: newlist})
+      this.setState({todos: this.state.todos.filter(todo => todo.id !== id)})
     })
   }
 
@@ -64,7 +62,6 @@ class Todos extends React.Component {
     return (
       <div>
         <h1>Todoリスト</h1>
-        {/* <TodosList todos={this.state.todos} /> */}
         {this.TodosList()}
       </div>
     )
