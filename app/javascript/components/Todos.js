@@ -1,6 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+
 
 
 //メインのコンポーネント
@@ -33,12 +37,11 @@ class Todos extends React.Component {
 //一覧についてのコンポーネント。クラスコンポーネントとは違い、関数コンポーネントになっている。
 const TodosList = (props) => { 
   //タスク一覧を表示する。
-  console.log("test")
   return (
     <div className="todos">
-        {props.todos.map((todo) =>
-          <TodoItem todo={todo} key={todo.id} />
-        )}
+      {props.todos.map((todo) =>
+        <TodoItem todos={props} id={todo.id} key={todo.id}/>
+      )}
     </div>
   )
 }
@@ -49,45 +52,45 @@ TodosList.propTypes = {
 
 //todoの1つの行を表すコンポーネント。上と同様関数コンポーネント。
 const TodoItem = (props) => {
+  const todoslist = props.todos
+  const printlist = todoslist.todos.filter(todo => todo.id === props.id)
   //受け取ったタスクのオブジェクトの値を、それぞれ行のセルに挿入。
-  const {id, title, content, created_at, updated_at} = props.todo
-
+  const {title, content, created_at, updated_at} = printlist[0]
   return (
     <div className="todo">
       <p>{title}</p>
       <p>{content}</p>
       <small>{created_at}</small>
       <small>{updated_at}</small>
-      <button onClick={() => { detailClick(id) }} className="edit-btn">edit</button>
-      <button onClick={() => { editClick(id) }} className="edit-btn">edit</button>
-      <button onClick={() => { deleteClick(id) }} className="delete-btn">Delete</button>
+      <div>
+        <button onClick={() => { detailClick(props) }} className="edit-btn">detail</button>
+        <button onClick={() => { editClick(props) }} className="edit-btn">edit</button>
+        <button onClick={() => { deleteClick(props) }} className="delete-btn">Delete</button>
+      </div>
     </div>
   )
 }
 
-const detailClick = (id) => {
+const detailClick = (id, props) => {
   //ポップアップ
 }
 
-const editClick = (id) => {
-  location.href = "/todos/" + id + "/edit"
-
+const editClick = (props) => {
+  location.href = "/todos/" + props.id + "/edit"
 }
 
-const deleteClick = (id) => {
-  axios.delete("/todos/" + id, {
+const deleteClick = (props) => {
+  axios.delete("/todos/" + props.id, {
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     }
   }).then( res => {
-    location.reload()
+    console.log(props.todos)
+    // location.reload()
     //↑とりあえず今は。表示配列の編集を行い表示させる！
   })
 }
 
-TodoItem.propTypes = {
-  todo: PropTypes.object.isRequired
-}
 
 export default Todos

@@ -8,11 +8,15 @@ class Todo extends React.Component {
       <React.Fragment>
         Greetings: {this.props.greeting}
         <p>{ this.props.test }</p>
-        <a href={ this.props.path }>new</a>
+        <button onClick={() => { newClick(this.props.path) }} className="edit-btn">new</button>
         <p>{this.props.todo}</p>
       </React.Fragment>
     );
   }
+}
+
+const newClick = (path) => {
+  location.href = path
 }
 
 //形チェック
