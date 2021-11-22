@@ -6,20 +6,27 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
 
-//メインのコンポーネント
 class Todos extends React.Component {
   
-  //コンストラクタ。このコンポーネントのstateにはタスク一覧を用意する
   constructor(props){
     super(props)
-    this.state = {initialTodos: this.props.todos, todos:[]}
-  }
-  
-  //componentDidMountでpropの内容を変化できる
-  componentDidMount() { 
-    this.setState({todos: this.state.initialTodos})
+    this.state = { initialTodos: this.props.todos, 
+                  todos:[],
+                  num: 0 }
+    this.numFunc = this.numFunc.bind(this)
   }
 
+  numFunc = (num) => {
+    this.setState({num: num})
+  }
+
+  componentDidMount() { 
+    this.setState({todos: this.state.initialTodos})
+    console.log(`Class Counter Mount !! ${this.state.num}`)
+  }
+  componentDidUpdate() {
+      console.log(`Class Counter Update !! ${this.state.num}`)
+  }
   TodosList = () => { 
     return (
       <div className="todos">
@@ -39,7 +46,7 @@ class Todos extends React.Component {
         <small>{created_at}</small>
         <small>{updated_at}</small>
         <div>
-          <button onClick={() => { detailClick(id) }} className="edit-btn">detail</button>
+          <button onClick={() => { detailClick(id) }} className="detail-btn">detail</button>
           <button onClick={() => { editClick(id) }} className="edit-btn">edit</button>
           <button onClick={() => { this.deleteClick(id) }} className="delete-btn">Delete</button>
         </div>
@@ -61,6 +68,11 @@ class Todos extends React.Component {
   render() {
     return (
       <div>
+        <Detail
+          num={ this.state.num }
+          numChangeFunc={ this.numFunc }
+        />
+        num:{ this.state.num }
         <h1>Todoリスト</h1>
         {this.TodosList()}
       </div>
@@ -68,6 +80,39 @@ class Todos extends React.Component {
   }
 }
 
+
+
+class Detail extends React.Component {
+  // //ポップアップ（モーダル）
+  constructor(props){
+    super(props)
+    this.numIncrement = this.numIncrement.bind(this);
+  }
+
+  numIncrement() {
+    this.props.numChangeFunc(this.props.num + 1)
+  }
+
+  render(){
+    return(
+      <div>
+        <button onClick={ this.numIncrement }>
+          num+
+        </button>
+      </div>
+    )
+  }
+}
+
+const detailClick = (id) => {
+  //ポップアップ（モーダル）
+}
+
+const editClick = (id) => {
+  location.href = "/todos/" + id + "/edit"
+}
+
+//以下　関数コンポーネントのもの
 // const TodosList = (props) => { 
 //   return (
 //     <div className="todos">
@@ -100,14 +145,6 @@ class Todos extends React.Component {
 //     </div>
 //   )
 // }
-
-const detailClick = (id) => {
-  //ポップアップ（モーダル）
-}
-
-const editClick = (id) => {
-  location.href = "/todos/" + id + "/edit"
-}
 
 // const deleteClick = (props) => {
 //   axios.delete("/todos/" + props.id, {
