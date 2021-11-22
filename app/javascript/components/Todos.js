@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import Box from '@material-ui/core/Box';
@@ -13,20 +13,19 @@ class Todos extends React.Component {
     this.state = { initialTodos: this.props.todos, 
                   todos:[],
                   num: 0 }
+    //ファンクションの紐付け
     this.numFunc = this.numFunc.bind(this)
   }
 
   numFunc = (num) => {
     this.setState({num: num})
   }
-
+  
+  //最初のレンダリングが完了した直後に呼び出し
   componentDidMount() { 
     this.setState({todos: this.state.initialTodos})
-    console.log(`Class Counter Mount !! ${this.state.num}`)
   }
-  componentDidUpdate() {
-      console.log(`Class Counter Update !! ${this.state.num}`)
-  }
+
   TodosList = () => { 
     return (
       <div className="todos">

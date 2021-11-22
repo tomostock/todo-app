@@ -5,6 +5,7 @@
   path: new_todo_path
 }) %>
 <hr>
+<%= react_component("Test", { todos: @todo }) %>
 <%= react_component("Todos", { todos: @todo }) %>
 <%# @todo.each do |t| %>
 <!--  <div>
