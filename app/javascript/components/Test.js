@@ -21,7 +21,9 @@ const boxstyle = {
 
 const Test = (props) => {
   const [todos, setTodos] = useState(props.todos)
-
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   //関数の実行タイミングをReactのレンダリング後まで
   useEffect(() => {
     setTodos(todos)
@@ -46,94 +48,90 @@ const Test = (props) => {
         <small>{created_at}</small>
         <small>{updated_at}</small>
         <div>
-          {/* {DetailModal(id)} */}
-          {/* {EditModal(id)} */}
+          {/* {DetailModal(id)}
+          {EditModal(id)} */}
           <Button onClick={() => { deleteClick(id) }}>Delete</Button>
         </div>
       </div>
     )
   }
 
-  // const NewModal = () => {
-  //   const [open, setOpen] = useState(false);
-  //   const handleOpen = () => setOpen(true);
-  //   const handleClose = () => setOpen(false);
-  //   return (
-  //     <div>
-  //       <Button onClick={handleOpen}>new</Button>
-  //       <Modal
-  //         open={open}
-  //         onClose={handleClose}
-  //         aria-labelledby="modal-modal-title"
-  //         aria-describedby="modal-modal-description"
-  //       >
-  //         <Box
-  //           component="form"
-  //           sx={boxstyle}
-  //           noValidate
-  //           autoComplete="off"
-  //         >
-  //         {NewForm()}
-  //         </Box>
-  //       </Modal>
-  //     </div>
-  //   );
-  // }
-  // const Test = () => {
-  //   setTodos([...todos, { title: "test", content: "test" }]);
-  // }
-  // const NewForm = () => {
-  //   const [PostTitle, setPostTitle] = useState("");
-  //   const [PostContent, setPostContent] = useState("");
+  const NewModal = () => {
 
-  //   const todoChange = (event) => {
-  //     switch (event.target.name) {
-  //       case 'UpdateTitle':
-  //         setPostTitle(event.target.value);
-  //         break;
-  //       case 'UpdateContent':
-  //         setPostContent(event.target.value);
-  //         break;
-  //     }
-  //   }
+    return (
+      <div>
+        <Button onClick={handleOpen}>new</Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            component="form"
+            sx={boxstyle}
+            noValidate
+            autoComplete="off"
+          >
+          {NewForm()}
+          </Box>
+        </Modal>
+      </div>
+    );
+  }
 
-  //   const postClick = (event) => {
-  //     event.preventDefault()
-  //     axios.post('/todos', {
-  //       title: PostTitle,
-  //       content: PostContent
-  //     },{
-  //       headers: {
-  //         'X-Requested-With': 'XMLHttpRequest',
-  //         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-  //       }}
-  //     ).then(function (response) {
-  //       // setTodos([...todos, { id: 1000, title: PostTitle, content: PostContent }]);
-  //     })
-  //   }
-  //   return(
-  //     <div>
-  //       <TextField
-  //         name="UpdateTitle"
-  //         onChange={todoChange}
-  //         fullWidth
-  //         id="standard-basic" 
-  //         label="Title" 
-  //         variant="standard"
-  //       /> 
-  //       <TextareaAutosize
-  //         name="UpdateContent"
-  //         onChange={todoChange}
-  //         id="outlined-multiline-static"
-  //         label="Multiline"
-  //         minRows={5}
-  //         style={{ width: '100%' }}
-  //         variant="outlined"
-  //       />
-  //       <Button onClick={postClick}>submit</Button>
-  //     </div>
-  //   )
-  // }
+  const NewForm = () => {
+    const [PostTitle, setPostTitle] = useState("");
+    const [PostContent, setPostContent] = useState("");
+
+    const todoChange = (event) => {
+      switch (event.target.name) {
+        case 'UpdateTitle':
+          setPostTitle(event.target.value);
+          break;
+        case 'UpdateContent':
+          setPostContent(event.target.value);
+          break;
+      }
+    }
+
+    const postClick = (event) => {
+      event.preventDefault()
+      axios.post('/todos', {
+        title: PostTitle,
+        content: PostContent
+      },{
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }}
+      ).then(function (response) {
+        setTodos([...todos, { id: Math.floor( Math.random() * (10000 + 1 - 900) ) + 900, title: PostTitle, content: PostContent }]);
+      })
+    }
+    return(
+      <div>
+        <TextField
+          name="UpdateTitle"
+          onChange={todoChange}
+          fullWidth
+          id="standard-basic" 
+          label="Title" 
+          variant="standard"
+        /> 
+        <TextareaAutosize
+          name="UpdateContent"
+          onChange={todoChange}
+          id="outlined-multiline-static"
+          label="Multiline"
+          minRows={5}
+          style={{ width: '100%' }}
+          variant="outlined"
+        />
+        <Button onClick={postClick}>submit</Button>
+      </div>
+    )
+  }
 
   // const EditModal = (Eid) => {
   //   const [open, setOpen] = useState(false);
@@ -280,7 +278,7 @@ const Test = (props) => {
   return (
     <div>
       <h1>Todoリスト</h1>
-      {/* {NewModal()} */}
+      {NewModal()}
       {TodosList()}
     </div>
   )
