@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import axios from 'axios'
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
 
+{/* <Child props={value}/>
+この場合、子コンポーネント(Child)では、渡した値(value)をpropsという名前で扱うことができる */}
 
 class Todos extends React.Component {
   
