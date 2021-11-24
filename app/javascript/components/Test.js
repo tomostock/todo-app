@@ -55,7 +55,7 @@ const Test = (props) => {
         <small>{created_at}</small>
         <small>{updated_at}</small>
         <div>
-          <Detail value={i}/>
+          <Detail />
           {/* {DetailModal(i)} */}
           {/* {EditModal(id)} */}
           <Button onClick={() => { deleteClick(id) }}>Delete</Button>
@@ -257,9 +257,9 @@ const Test = (props) => {
     })
   }
   
-  function Detail(val) {
-    // console.log(i)
-    const {title, content, created_at, updated_at} = todos[val.value]
+  function Detail() {
+
+    // const {title, content, created_at, updated_at} = val.value
     return (
       <div>
         <Button onClick={DetailOpen}>detail</Button>
@@ -270,10 +270,10 @@ const Test = (props) => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={boxstyle}>
-            <h2>{title}</h2>
-            <p>{content}</p>
-            <small>created:{created_at}</small><br />
-            <small>updated:{updated_at}</small><br />
+            <h2>dddd</h2>
+            <p>ダミー</p>
+            <small>created:XXXX-XX-XX</small><br />
+            <small>updated:XXXX-XX-XX</small><br />
             <Button onClick={DetailClose}>close</Button>
           </Box>
         </Modal>
