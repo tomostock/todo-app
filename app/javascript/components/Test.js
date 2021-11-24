@@ -55,7 +55,8 @@ const Test = (props) => {
         <small>{created_at}</small>
         <small>{updated_at}</small>
         <div>
-          {DetailModal(id)}
+          <Detail value={i}/>
+          {/* {DetailModal(i)} */}
           {/* {EditModal(id)} */}
           <Button onClick={() => { deleteClick(id) }}>Delete</Button>
         </div>
@@ -255,11 +256,10 @@ const Test = (props) => {
       setTodos(todos.filter(todo => todo.id !== id))
     })
   }
-
-  const DetailModal = (Did) => {
-    const data = todos.filter(todo => todo.id == Did)
-    const {title, content, created_at, updated_at} = data[0]
-
+  
+  function Detail(val) {
+    // console.log(i)
+    const {title, content, created_at, updated_at} = todos[val.value]
     return (
       <div>
         <Button onClick={DetailOpen}>detail</Button>
