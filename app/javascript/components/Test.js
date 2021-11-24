@@ -21,9 +21,16 @@ const boxstyle = {
 
 const Test = (props) => {
   const [todos, setTodos] = useState(props.todos)
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [max, setMax] = useState(props.max)
+
+  const [detailopen, setDetailOpen] = useState(false)
+  const DetailOpen = () => setDetailOpen(true)
+  const DetailClose = () => setDetailOpen(false)
+
+  const [newopen, setNewOpen] = useState(false)
+  const NewOpen = () => setNewOpen(true)
+  const NewClose = () => setNewOpen(false)
+
   //関数の実行タイミングをReactのレンダリング後まで
   useEffect(() => {
     setTodos(todos)
@@ -48,8 +55,8 @@ const Test = (props) => {
         <small>{created_at}</small>
         <small>{updated_at}</small>
         <div>
-          {/* {DetailModal(id)}
-          {EditModal(id)} */}
+          {DetailModal(id)}
+          {/* {EditModal(id)} */}
           <Button onClick={() => { deleteClick(id) }}>Delete</Button>
         </div>
       </div>
@@ -60,10 +67,10 @@ const Test = (props) => {
 
     return (
       <div>
-        <Button onClick={handleOpen}>new</Button>
+        <Button onClick={NewOpen}>new</Button>
         <Modal
-          open={open}
-          onClose={handleClose}
+          open={newopen}
+          onClose={NewClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -106,7 +113,9 @@ const Test = (props) => {
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         }}
       ).then(function (response) {
-        setTodos([...todos, { id: Math.floor( Math.random() * (10000 + 1 - 900) ) + 900, title: PostTitle, content: PostContent }]);
+        let a = max + 1
+        setMax({a})
+        setTodos([...todos, { id: max, title: PostTitle, content: PostContent }])
       })
     }
     return(
@@ -247,33 +256,30 @@ const Test = (props) => {
     })
   }
 
-  // const DetailModal = (Did) => {
-  //   const [open, setOpen] = useState(false);
-  //   const handleOpen = () => setOpen(true);
-  //   const handleClose = () => setOpen(false);
-  //   const data = todos.filter(todo => todo.id == Did)
-  //   const {title, content, created_at, updated_at} = data[0]
+  const DetailModal = (Did) => {
+    const data = todos.filter(todo => todo.id == Did)
+    const {title, content, created_at, updated_at} = data[0]
 
-  //   return (
-  //     <div>
-  //       <Button onClick={handleOpen}>detail</Button>
-  //       <Modal
-  //         open={open}
-  //         onClose={handleClose}
-  //         aria-labelledby="modal-modal-title"
-  //         aria-describedby="modal-modal-description"
-  //       >
-  //         <Box sx={boxstyle}>
-  //           <h2>{title}</h2>
-  //           <p>{content}</p>
-  //           <small>created:{created_at}</small><br />
-  //           <small>updated:{updated_at}</small><br />
-  //           <Button onClick={handleClose}>close</Button>
-  //         </Box>
-  //       </Modal>
-  //     </div>
-  //   );
-  // }
+    return (
+      <div>
+        <Button onClick={DetailOpen}>detail</Button>
+        <Modal
+          open={detailopen}
+          onClose={DetailClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={boxstyle}>
+            <h2>{title}</h2>
+            <p>{content}</p>
+            <small>created:{created_at}</small><br />
+            <small>updated:{updated_at}</small><br />
+            <Button onClick={DetailClose}>close</Button>
+          </Box>
+        </Modal>
+      </div>
+    );
+  }
 
   return (
     <div>

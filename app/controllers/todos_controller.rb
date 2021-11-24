@@ -2,6 +2,7 @@ class TodosController < ApplicationController
   
   def index
     @todo = Todo.all.order(id: "DESC")
+    @max = Todo.maximum(:id)
   end
   
   def new
