@@ -39,17 +39,17 @@ const Test = (props) => {
   const TodosList = () => { 
     return (
       <div className="todos">
-        {todos.map((todo) =>
-          TodoItem(todo)
+        {todos.map((todo, i) =>
+          TodoItem(todo, i)
         )}
       </div>
     )
   }
 
-  const TodoItem = (todo) => {
+  const TodoItem = (todo, i) => {
     const {id, title, content, created_at, updated_at} = todo
     return (
-      <div className="todo" key={id}>
+      <div className="todo" key={i}>
         <p>{title}</p>
         <p>{content}</p>
         <small>{created_at}</small>
