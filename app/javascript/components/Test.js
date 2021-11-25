@@ -23,6 +23,11 @@ const Test = (props) => {
   const [todos, setTodos] = useState(props.todos)
   const [max, setMax] = useState(props.max)
   const [detailId, setDetail] = useState(0)
+  const [editId, setEdit] = useState(0)
+
+  const [editopen, setEditOpen] = useState(false)
+  const EditOpen = () => setEditOpen(true)
+  const EditClose = () => setEditOpen(false)
 
   const [detailopen, setDetailOpen] = useState(false)
   const DetailOpen = () => setDetailOpen(true)
@@ -31,6 +36,9 @@ const Test = (props) => {
   const [newopen, setNewOpen] = useState(false)
   const NewOpen = () => setNewOpen(true)
   const NewClose = () => setNewOpen(false)
+
+  const [UpdateTitle, setUpdateTitle] = useState("")
+  const [UpdateContent, setUpdateContent] = useState("")
 
   //関数の実行タイミングをReactのレンダリング後まで
   useEffect(() => {
@@ -60,7 +68,10 @@ const Test = (props) => {
                                     DetailOpen() }}>
             detail
           </Button>
-          {/* {EditModal(id)} */}
+          <Button onClick={() => {  editClick(id)
+                                    EditOpen() }}>
+            edit
+          </Button>
           <Button onClick={() => { deleteClick(id) }}>Delete</Button>
         </div>
       </div>
@@ -147,6 +158,7 @@ const Test = (props) => {
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         }}
       ).then(function (response) {
+        //id生成がいまいち
         let a = max + 1
         setMax({a})
         setTodos([...todos, { id: max, title: PostTitle, content: PostContent }])
@@ -176,106 +188,104 @@ const Test = (props) => {
     )
   }
 
-  // const EditModal = (Eid) => {
-  //   const [open, setOpen] = useState(false);
-  //   const handleOpen = () => setOpen(true);
-  //   const handleClose = () => setOpen(false);
-  //   return (
-  //     <div>
-  //       <Button onClick={handleOpen}>edit</Button>
-  //       <Modal
-  //         open={open}
-  //         onClose={handleClose}
-  //         aria-labelledby="modal-modal-title"
-  //         aria-describedby="modal-modal-description"
-  //       >
-  //         <Box
-  //           component="form"
-  //           sx={boxstyle}
-  //           noValidate
-  //           autoComplete="off"
-  //         >
-  //         {editForm(Eid)}
-  //         </Box>
-  //       </Modal>
-  //     </div>
-  //   );
-  // }
+  const editClick = (val) => { 
+    setEdit(val)
+    return
+  }
 
-  // const editForm = (Eid) => {
-  //   const data = todos.filter(todo => todo.id == Eid)
-  //   const {id, title, content, created_at, updated_at} = data[0]
-  //   const [UpdateTitle, setUpdateTitle] = useState("");
-  //   const [UpdateContent, setUpdateContent] = useState("");
+  const Edit = (Eid) => {
+    if(Eid > 0) {
+      return (
+        <div>
+          <Modal
+            open={editopen}
+            onClose={EditClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box
+              component="form"
+              sx={boxstyle}
+              noValidate
+              autoComplete="off"
+            >
+            {editForm(Eid)}
+            </Box>
+          </Modal>
+        </div>
+      )
+    }else{
+      return
+    }
+  }
 
-  //   const todoChange = (event) => {
-  //     switch (event.target.name) {
-  //       case 'UpdateTitle':
-  //         setUpdateTitle(event.target.value);
-  //         break;
-  //       case 'UpdateContent':
-  //         setUpdateContent(event.target.value);
-  //         break;
-  //     }
-  //   }
+  const editForm = (Eid) => {
+    const data = todos.filter(todo => todo.id == Eid)
+    const {id, title, content, created_at, updated_at} = data[0]
 
-  //   const editClick = (event) => {
-  //     event.preventDefault()
-  //     const test = todos.map((todo, i) => {
-  //       if(todo.id == id){
-  //         // console.log(i)
-  //         // console.log(todo.title)
-  //         // console.log(todo.content)
-  //         // console.log(UpdateTitle)
-  //         // console.log(UpdateContent)
-  //         UpdateTitle == "" ? setUpdateTitle(todo.title) : ""
-  //         UpdateContent == "" ? setUpdateContent(todo.content) : ""
-  //         const Put = {title: UpdateTitle, content: UpdateContent}
-  //         axios.put("/todos/" + id,
-  //           Put, {
-  //             headers: {
-  //               'X-Requested-With': 'XMLHttpRequest',
-  //               'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-  //             }
-  //           }).then(res => {
-  //             setTodos([
-  //               ...todos[i],
-  //               { title: UpdateTitle, content: UpdateContent, },
-  //             ])
-  //           })
-  //           .catch(error => {
-  //               // alert("「" + modify.name + "」更新失敗");
-  //               console.log(error);
-  //           });
-  //       }
-  //     })
-  //   }
+    const todoChange = (event) => {
+      switch (event.target.name) {
+        case 'UpdateTitle':
+          setUpdateTitle(event.target.value);
+          break;
+        case 'UpdateContent':
+          setUpdateContent(event.target.value);
+          break;
+      }
+    }
 
-  //   return(
-  //     <div>
-  //       <TextField
-  //         name="UpdateTitle"
-  //         defaultValue={title}
-  //         onChange={todoChange}
-  //         fullWidth
-  //         id="standard-basic" 
-  //         label="Title" 
-  //         variant="standard"
-  //       /> 
-  //       <TextareaAutosize
-  //         name="UpdateContent"
-  //         defaultValue={content}
-  //         onChange={todoChange}
-  //         id="outlined-multiline-static"
-  //         label="Multiline"
-  //         minRows={5}
-  //         style={{ width: '100%' }}
-  //         variant="outlined"
-  //       />
-  //       <Button onClick={editClick}>submit</Button>
-  //     </div>
-  //   )
-  // }
+    const editSubmit = (event) => {
+      event.preventDefault()
+      const new_todos = todos
+      const test = todos.map((todo, i) => {
+        if(todo.id == id){
+          UpdateTitle == "" ? setUpdateTitle(todo.title) : ""
+          UpdateContent == "" ? setUpdateContent(todo.content) : ""
+          const Put = {title: UpdateTitle, content: UpdateContent}
+          new_todos[i].title = UpdateTitle
+          new_todos[i].content = UpdateContent
+          console.log(new_todos[i])
+          axios.put("/todos/" + id,
+            Put, {
+              headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+              }
+            }).then(res => {
+              setTodos(new_todos)
+            })
+            .catch(error => {
+                console.log(error);
+            });
+         }
+      })
+    }
+
+    return(
+      <div>
+        <TextField
+          name="UpdateTitle"
+          defaultValue={title}
+          onChange={todoChange}
+          fullWidth
+          id="standard-basic" 
+          label="Title" 
+          variant="standard"
+        /> 
+        <TextareaAutosize
+          name="UpdateContent"
+          defaultValue={content}
+          onChange={todoChange}
+          id="outlined-multiline-static"
+          label="Multiline"
+          minRows={5}
+          style={{ width: '100%' }}
+          variant="outlined"
+        />
+        <Button onClick={editSubmit}>submit</Button>
+      </div>
+    )
+  }
 
 
   const deleteClick = (id) => {
@@ -295,6 +305,7 @@ const Test = (props) => {
       {NewModal()}
       {TodosList()}
       {Detail(detailId)}
+      {Edit(editId)}
     </div>
   )
 }
