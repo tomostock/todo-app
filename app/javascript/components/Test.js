@@ -22,6 +22,7 @@ const boxstyle = {
 const Test = (props) => {
   const [todos, setTodos] = useState(props.todos)
   const [max, setMax] = useState(props.max)
+  const [detailId, setDetail] = useState(0)
 
   const [detailopen, setDetailOpen] = useState(false)
   const DetailOpen = () => setDetailOpen(true)
@@ -55,13 +56,45 @@ const Test = (props) => {
         <small>{created_at}</small>
         <small>{updated_at}</small>
         <div>
-          <Detail />
-          {/* {DetailModal(i)} */}
+          <Button onClick={() => {  detailClick(id)
+                                    DetailOpen() }}>
+            detail
+          </Button>
           {/* {EditModal(id)} */}
           <Button onClick={() => { deleteClick(id) }}>Delete</Button>
         </div>
       </div>
     )
+  }
+
+  const detailClick = (val) => { 
+    setDetail(val)
+    return
+  }
+
+  const Detail = (val) => {
+    if(val > 0) {
+      const data = todos.filter(todo => todo.id == val)
+      const {title, content, created_at, updated_at} = data[0]
+      return(
+        <Modal
+          open={detailopen}
+          onClose={DetailClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={boxstyle}>
+            <h2>{title}</h2>
+            <p>{content}</p>
+            <small>{created_at}</small><br />
+            <small>{updated_at}</small><br />
+            <Button onClick={DetailClose}>close</Button>
+          </Box>
+        </Modal>
+      )
+    }else{
+      return
+    }
   }
 
   const NewModal = () => {
@@ -245,7 +278,6 @@ const Test = (props) => {
   // }
 
 
-
   const deleteClick = (id) => {
     axios.delete("/todos/" + id, {
       headers: {
@@ -257,35 +289,12 @@ const Test = (props) => {
     })
   }
   
-  function Detail() {
-
-    // const {title, content, created_at, updated_at} = val.value
-    return (
-      <div>
-        <Button onClick={DetailOpen}>detail</Button>
-        <Modal
-          open={detailopen}
-          onClose={DetailClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={boxstyle}>
-            <h2>dddd</h2>
-            <p>ダミー</p>
-            <small>created:XXXX-XX-XX</small><br />
-            <small>updated:XXXX-XX-XX</small><br />
-            <Button onClick={DetailClose}>close</Button>
-          </Box>
-        </Modal>
-      </div>
-    );
-  }
-
   return (
     <div>
       <h1>Todoリスト</h1>
       {NewModal()}
       {TodosList()}
+      {Detail(detailId)}
     </div>
   )
 }
