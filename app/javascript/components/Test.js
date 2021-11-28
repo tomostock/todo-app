@@ -1,4 +1,4 @@
-import React, { useState, useEffect, setState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -72,7 +72,9 @@ const Test = (props) => {
                                     EditOpen() }}>
             edit
           </Button>
-          <Button onClick={() => { deleteClick(id) }}>Delete</Button>
+          <Button onClick={() => { deleteClick(id) }}>
+            Delete
+          </Button>
         </div>
       </div>
     )
@@ -158,10 +160,18 @@ const Test = (props) => {
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         }}
       ).then(function (response) {
+        axios.get('/todos', {responseType : 'document'}).then((res) =>{
+          const set_data =  res.data.body.childNodes.item(1).getAttribute('data-react-props')
+          console.log(set_data)
+          // console.log(String(set_data).indexOf( 'data-react-props=' ))
+
+        }).catch( err =>{
+          console.log(err)
+        })
         //id生成がいまいち
-        let a = max + 1
-        setMax({a})
-        setTodos([...todos, { id: max, title: PostTitle, content: PostContent }])
+        // let a = max + 1
+        // setMax({a})
+        // setTodos([...todos, { id: max, title: PostTitle, content: PostContent }])
       })
     }
     return(
