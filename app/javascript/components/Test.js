@@ -162,16 +162,11 @@ const Test = (props) => {
       ).then(function (response) {
         axios.get('/todos', {responseType : 'document'}).then((res) =>{
           const set_data =  res.data.body.childNodes.item(1).getAttribute('data-react-props')
-          console.log(set_data)
-          // console.log(String(set_data).indexOf( 'data-react-props=' ))
-
+          const json_data = JSON.parse(set_data)
+          setTodos(json_data.todos)
         }).catch( err =>{
           console.log(err)
         })
-        //id生成がいまいち
-        // let a = max + 1
-        // setMax({a})
-        // setTodos([...todos, { id: max, title: PostTitle, content: PostContent }])
       })
     }
     return(
