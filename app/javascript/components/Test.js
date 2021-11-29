@@ -18,10 +18,8 @@ const boxstyle = {
   p: 4,
 };
 
-
 const Test = (props) => {
   const [todos, setTodos] = useState(props.todos)
-  const [max, setMax] = useState(props.max)
   const [detailId, setDetail] = useState(0)
   const [editId, setEdit] = useState(0)
 
@@ -40,7 +38,6 @@ const Test = (props) => {
   const [UpdateTitle, setUpdateTitle] = useState("")
   const [UpdateContent, setUpdateContent] = useState("")
 
-  //関数の実行タイミングをReactのレンダリング後まで
   useEffect(() => {
     setTodos(todos)
   }, [todos])
@@ -56,23 +53,21 @@ const Test = (props) => {
   }
 
   const TodoItem = (todo, i) => {
-    const {id, title, content, created_at, updated_at} = todo
+    const {id, title, content } = todo
     return (
-      <div className="todo" key={i}>
-        <p>{title}</p>
-        <p>{content}</p>
-        <small>{created_at}</small>
-        <small>{updated_at}</small>
+      <div className="todoContainer" key={i}>
+        <h2>{title}</h2>
+        <p>{omittedContent(content)}</p>
         <div>
-          <Button onClick={() => {  detailClick(id)
+          <Button className="detailBtn" onClick={() => {  detailClick(id)
                                     DetailOpen() }}>
             detail
           </Button>
-          <Button onClick={() => {  editClick(id)
+          <Button className="editBtn" onClick={() => {  editClick(id)
                                     EditOpen() }}>
             edit
           </Button>
-          <Button onClick={() => { deleteClick(id) }}>
+          <Button className="delBtn" onClick={() => { deleteClick(id) }}>
             Delete
           </Button>
         </div>
@@ -110,11 +105,19 @@ const Test = (props) => {
     }
   }
 
+  const omittedContent = (string) => {
+    const MAX_LENGTH = 20;
+    if (string.length > MAX_LENGTH) {
+      return string.substr(0, MAX_LENGTH) + '...';
+    }
+    return string;
+  }
+
   const NewModal = () => {
 
     return (
       <div>
-        <Button onClick={NewOpen}>new</Button>
+        <Button className="newBtn" onClick={NewOpen}>new</Button>
         <Modal
           open={newopen}
           onClose={NewClose}
@@ -292,7 +295,6 @@ const Test = (props) => {
     )
   }
 
-
   const deleteClick = (id) => {
     axios.delete("/todos/" + id, {
       headers: {
@@ -306,15 +308,19 @@ const Test = (props) => {
   
   return (
     <div>
-      <h1>Todoリスト</h1>
-      {NewModal()}
-      {TodosList()}
+      <div className="header">
+        <h1>TODO</h1>
+        {NewModal()}
+      </div>
+      <div className="content">
+        <div className="todos">
+          {TodosList()}
+        </div>
+      </div>
       {Detail(detailId)}
       {Edit(editId)}
     </div>
   )
 }
-
-
 
 export default Test

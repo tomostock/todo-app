@@ -1,0 +1,41 @@
+.header {
+  text-align: center;
+  .newBtn {
+    background-color: royalblue;
+  }
+}
+
+.content { 
+  padding: 20px;
+}
+
+.todos {
+  margin: auto;
+  text-align: center;
+  display: flex;
+  justify-content: left;
+  flex-wrap: wrap;
+}
+
+.todoContainer {
+  margin: 1px;
+  border: 1px solid lightslategrey;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 0px 5px 15px 5px;
+  width: 33%;
+  p {
+    font-size: 10px;
+  }
+  .detailBtn {
+    background-color: lightslategrey;
+  }
+  .editBtn {
+    margin-left: 3px;
+    background-color: lightskyblue;
+  }
+  .delBtn {
+    margin-left: 3px;
+    background-color:hotpink;
+  }
+}
