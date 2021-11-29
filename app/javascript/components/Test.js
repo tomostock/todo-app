@@ -96,7 +96,7 @@ const Test = (props) => {
             <p>{content}</p>
             <small>{created_at}</small><br />
             <small>{updated_at}</small><br />
-            <Button onClick={DetailClose}>close</Button>
+            <Button className="modalBtn" onClick={DetailClose}>close</Button>
           </Box>
         </Modal>
       )
@@ -191,7 +191,7 @@ const Test = (props) => {
           style={{ width: '100%' }}
           variant="outlined"
         />
-        <Button onClick={postClick}>submit</Button>
+        <Button className="modalBtn" onClick={postClick}>submit</Button>
       </div>
     )
   }
@@ -290,7 +290,7 @@ const Test = (props) => {
           style={{ width: '100%' }}
           variant="outlined"
         />
-        <Button onClick={editSubmit}>submit</Button>
+        <Button className="modalBtn" onClick={editSubmit}>submit</Button>
       </div>
     )
   }
